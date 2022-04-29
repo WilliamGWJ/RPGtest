@@ -1,3 +1,3 @@
 declare interface CustomGameEventDeclarations {
-    c2s_test_event: {};
+    c2s_test_event: {cuurent:string};
 }

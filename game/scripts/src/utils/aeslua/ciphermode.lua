@@ -76,7 +76,7 @@ end
 -- string - string to decrypt
 -- modefunction - function for cipher mode to use
 --
-function public.decryptString(key, data, modeFunction)
+function public.decryptString(key, data, modeFunction,iv)
     local iv = iv or {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
     
     local keySched;

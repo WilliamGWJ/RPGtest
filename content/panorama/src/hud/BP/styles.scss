@@ -1,0 +1,63 @@
+.root {
+    width: 100%;
+    height: 100%;
+}
+
+.BPMian{
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition-duration: 1s;
+    transition-property: background-color;
+    &.view{
+        opacity: 1;
+    }
+    &.close{
+        opacity: 0;
+    }
+}
+
+.SELECT_MAIN{
+    width: 300px;
+    height: 700px;
+    vertical-align: center;
+    background-color: white;
+}
+
+.BLUE_SELECT_MAIN{
+    @extend .SELECT_MAIN;
+    x: 100px;
+    transition-duration: 1s;
+    transition-property: background-color;
+    &.higt{
+        background-color: rgb(134, 255, 160);
+    }
+    &.low{
+        background-color: white;
+    }
+}
+
+.RED_SELECT_MAIN{
+    @extend .SELECT_MAIN;
+    x: 1300px;
+    transition-duration: 1s;
+    transition-property: background-color;
+    &.higt{
+        background-color: rgb(134, 255, 160);
+    }
+    &.low{
+        background-color: white;
+    }
+}
+
+.POOL{
+    vertical-align: center;
+    width: 500px;
+    height: 700px;
+    background-color: rgb(238, 224, 97);
+    x:700px;
+}
+
+.tit{
+    font-size: 60px;
+}

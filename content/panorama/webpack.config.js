@@ -1,6 +1,6 @@
 const path = require('path');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
-const { PanoramaManifestPlugin, PanoramaTargetPlugin } = require('webpack-panorama');
+const { PanoramaManifestPlugin, PanoramaTargetPlugin } = require('unco-webpack-panorama');
 
 /** @type {import('webpack').Configuration} */
 const isProduction = process.env.NODE_ENV === 'production';
@@ -9,7 +9,7 @@ module.exports = {
     context: path.resolve(__dirname, 'src'),
     // devtool: isProduction ? false : 'eval-inline-source-map',
     output: {
-        path: path.resolve(__dirname, 'layout/custom_game'),
+        path: path.resolve(__dirname, 'layout/custom_game/'),
         publicPath: 'file://{resources}/layout/custom_game/',
     },
 
@@ -22,12 +22,12 @@ module.exports = {
         rules: [
             {
                 test: /\.xml$/,
-                loader: 'webpack-panorama/lib/layout-loader',
+                loader: 'unco-webpack-panorama/lib/layout-loader',
             },
             {
                 test: /\.[jt]sx?$/,
                 issuer: /\.xml$/,
-                loader: 'webpack-panorama/lib/entry-loader',
+                loader: 'unco-webpack-panorama/lib/entry-loader',
             },
             {
                 test: /\.tsx?$/,
@@ -56,13 +56,18 @@ module.exports = {
     plugins: [
         new PanoramaTargetPlugin(),
         new PanoramaManifestPlugin({
+            injectReactUmd:true,
             entries: [
+                { import: './hud/INIT/layout.xml',type:"Hud"},
+                { import: './hud/BATTLE/layout.xml',type:"Hud"},
+                { import: './hud/BP/layout.xml',type:"Hud"},
+                { import: './hud/GAMEOVER/layout.xml',type:"Hud"},
                 {
                     import: './loading-screen/layout.xml',
                     filename: 'custom_loading_screen.xml',
                 },
-                { import: './hud/layout.xml', type: 'Hud' },
                 { import: './end_screen/layout.xml', type: 'EndScreen' },
+                { import: './hud/layout.xml', type: 'Hud' },
             ],
         }),
         new ForkTsCheckerWebpackPlugin({

@@ -96,29 +96,15 @@ function public.toHexString(data)
 end
 
 function public.padByteString(data)
-    local dataLength = #data;
-    
-    local random1 = math.random(0,255);
-    local random2 = math.random(0,255);
+    local paddingLength = math.ceil(#data/16)*16 - #data; 
+    local padding = ""; 
+    local paddingValue = string. char ( paddingLength )  -- PKCS7 padding 
+    for i=1,paddingLength do 
+    padding = padding .. paddingValue; 
+-- PKCS7 padding 
+    end  
 
-    local prefix = string.char(random1,
-                               random2,
-                               random1,
-                               random2,
-                               public.getByte(dataLength, 3),
-                               public.getByte(dataLength, 2),
-                               public.getByte(dataLength, 1),
-                               public.getByte(dataLength, 0));
-
-    data = prefix .. data;
-
-    local paddingLength = math.ceil(#data/16)*16 - #data;
-    local padding = "";
-    for i=1,paddingLength do
-        padding = padding .. string.char(math.random(0,255));
-    end 
-
-    return data .. padding;
+    return data .. padding; 
 end
 
 function private.properlyDecrypted(data)
@@ -132,16 +118,8 @@ function private.properlyDecrypted(data)
 end
 
 function public.unpadByteString(data)
-    if (not private.properlyDecrypted(data)) then
-        return nil;
-    end
-
-    local dataLength = public.putByte(string.byte(data,5), 3)
-                     + public.putByte(string.byte(data,6), 2) 
-                     + public.putByte(string.byte(data,7), 1)    
-                     + public.putByte(string.byte(data,8), 0);
-    
-    return string.sub(data,9,8+dataLength);
+    local padLength = tonumber((string.byte(data, #data)));
+    return string.sub(data,1, #data-padLength)   --unpack
 end
 
 function public.xorIV(data, iv)

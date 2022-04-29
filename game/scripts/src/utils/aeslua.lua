@@ -2,8 +2,8 @@ local private = {};
 local public = {};
 aeslua = public;
 
-local ciphermode = require("utils.aeslua.ciphermode");
-local util = require("utils.aeslua.util");
+local ciphermode = require("aeslua.ciphermode");
+local util = require("aeslua.util");
 
 --
 -- Simple API for encrypting strings.
@@ -35,7 +35,7 @@ function private.pwToKey(password, keyLength)
     end
     
     local pwBytes = {string.byte(password,1,#password)};
-    password = ciphermode.encryptString(pwBytes, password, ciphermode.encryptCBC);
+    -- password = ciphermode.encryptString(pwBytes, password, ciphermode.encryptCBC);
     
     password = string.sub(password, 1, keyLength);
    
@@ -87,7 +87,7 @@ end
 --
 -- mode and keyLength must be the same for encryption and decryption.
 --
-function public.decrypt(password, data, keyLength, mode)
+function public.decrypt(password, data, keyLength, mode,iv)
     local mode = mode or public.CBCMODE;
     local keyLength = keyLength or public.AES128;
 
@@ -95,15 +95,16 @@ function public.decrypt(password, data, keyLength, mode)
     
     local plain;
     if (mode == public.ECBMODE) then
-        plain = ciphermode.decryptString(key, data, ciphermode.decryptECB);
+        plain = ciphermode.decryptString(key, data, ciphermode.decryptECB,iv);
     elseif (mode == public.CBCMODE) then
-        plain = ciphermode.decryptString(key, data, ciphermode.decryptCBC);
+        plain = ciphermode.decryptString(key, data, ciphermode.decryptCBC,iv);
+        print("属于CBC加密")
     elseif (mode == public.OFBMODE) then
-        plain = ciphermode.decryptString(key, data, ciphermode.decryptOFB);
+        plain = ciphermode.decryptString(key, data, ciphermode.decryptOFB,iv);
     elseif (mode == public.CFBMODE) then
-        plain = ciphermode.decryptString(key, data, ciphermode.decryptCFB);
+        plain = ciphermode.decryptString(key, data, ciphermode.decryptCFB,iv);
     end
-    
+     
     result = util.unpadByteString(plain);
     
     if (result == nil) then

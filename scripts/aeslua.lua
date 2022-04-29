@@ -87,7 +87,7 @@ end
 --
 -- mode and keyLength must be the same for encryption and decryption.
 --
-function public.decrypt(password, data, keyLength, mode)
+function public.decrypt(password, data, keyLength, mode,iv)
     local mode = mode or public.CBCMODE;
     local keyLength = keyLength or public.AES128;
 
@@ -95,13 +95,13 @@ function public.decrypt(password, data, keyLength, mode)
     
     local plain;
     if (mode == public.ECBMODE) then
-        plain = ciphermode.decryptString(key, data, ciphermode.decryptECB);
+        plain = ciphermode.decryptString(key, data, ciphermode.decryptECB,iv);
     elseif (mode == public.CBCMODE) then
-        plain = ciphermode.decryptString(key, data, ciphermode.decryptCBC);
+        plain = ciphermode.decryptString(key, data, ciphermode.decryptCBC,iv);
     elseif (mode == public.OFBMODE) then
-        plain = ciphermode.decryptString(key, data, ciphermode.decryptOFB);
+        plain = ciphermode.decryptString(key, data, ciphermode.decryptOFB,iv);
     elseif (mode == public.CFBMODE) then
-        plain = ciphermode.decryptString(key, data, ciphermode.decryptCFB);
+        plain = ciphermode.decryptString(key, data, ciphermode.decryptCFB,iv);
     end
     
     result = util.unpadByteString(plain);
